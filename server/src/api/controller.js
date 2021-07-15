@@ -14,6 +14,9 @@ module.exports.get = async function(req, res) {
 
 module.exports.post = async function(req, res) {
   const file = req.file; 
+  if(!file){
+    return res.status(400).json({msg:"no file"});
+  }
   try{
     let md5 = CryptoJS.SHA256(file.buffer).toString();
     await fs.writeFile(path.join(FILE_DIR, md5), file.buffer);
