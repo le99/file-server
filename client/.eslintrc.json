@@ -20,7 +20,9 @@
     "localStorage": true,
     "window": true,
     "navigator": true,
-    "document": true
+    "document": true,
+    "FileReader": true,
+    "FormData": true
   }
 }
 

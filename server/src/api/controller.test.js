@@ -1,7 +1,8 @@
 require('dotenv').config();
 
 const app = require('../../app');
-
+const _ = require('underscore');
+const fs = require('fs').promises;
 
 //https://mochajs.org
 //https://www.chaijs.com/guide/styles/#assert
@@ -9,7 +10,8 @@ const assert = require('chai').assert;
 
 const request = require('supertest');
 
-describe('GET /', ()=>{
+
+describe('/file POST', ()=>{
 
   before(async () => {
   });
@@ -19,16 +21,22 @@ describe('GET /', ()=>{
 
   it('success', async ()=>{
     let res = await request(app)
-      .get('/api')
-      .expect('Content-Type', 'application/json; charset=utf-8')
+      .post('/api/file')
+      .attach('file', './testImage/image.png')
+      .set('Content-Type', 'multipart/form-data;')
       .expect(200);
       
+    let id = res.body.id
 
-    assert.deepEqual(res.body, {msg: "ok"});
+    assert.isTrue(!_.isUndefined(id));
 
+
+    let f = await fs.readFile('./testImage/image.png');
+
+    res = await request(app)
+      .get(`/api/file/${id}`)
+      .expect(200);
     
-
+    assert.deepEqual(f, res.body);    
   });
-
-
 });
