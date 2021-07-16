@@ -14,15 +14,15 @@ module.exports.get = async function(req, res) {
 
 module.exports.post = async function(req, res) {
   const file = req.file; 
-  if(!file){
-    return res.status(400).json({msg:"no file"});
-  }
   try{
-    let md5 = CryptoJS.SHA256(file.buffer).toString();
-    await fs.writeFile(path.join(FILE_DIR, md5), file.buffer);
-    res.json({id: md5});
+
+    let hash = CryptoJS.SHA256(CryptoJS.lib.WordArray.create(file.buffer));
+    hash = hash.toString(CryptoJS.enc.Hex);
+    await fs.writeFile(path.join(FILE_DIR, hash), file.buffer);
+    res.json({hash});
   }
   catch(err){
+    console.log(err);
     return res.status(500).json(err);
   }
 };

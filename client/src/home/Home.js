@@ -36,7 +36,7 @@ function Home(){
           headers: {'Content-Type': 'multipart/form-data;'}
         }
       )
-      setHash(res.data.id);
+      setHash(res.data.hash);
     }
     
   }
@@ -49,16 +49,6 @@ function Home(){
 
   return (
     <div>
-      Hello
-      <button onClick={() => onClick()}>
-        API
-      </button>
-
-      {message}
-
-
-      <hr />
-
       <input type="file"
         id="avatar" name="avatar"
         accept="image/png, image/jpeg"
@@ -66,6 +56,17 @@ function Home(){
       >
       </input>
 
+      <hr />
+      <button onClick={() => onClick()}>
+        Upload Image
+      </button>
+
+
+      <hr />
+
+      {message}
+
+    
       {hash && 
       <React.Fragment>
         <p>

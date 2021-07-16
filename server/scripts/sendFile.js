@@ -1,29 +1,20 @@
 const axios = require('axios');
 const fsPromises = require('fs').promises;
-
-const fs = require('fs');
-
-const { Readable } = require('stream');
 var FormData = require('form-data');
 
-const {Duplex} = require('stream'); // Native Node Module 
-
-function bufferToStream(myBuuffer) {
-  let tmp = new Duplex();
-  tmp.push(myBuuffer);
-  tmp.push(null);
-  return tmp;
-}
 
 (async () => {
 
   let f = await fsPromises.readFile('./testImage/image.png');
-  let s = fs.createReadStream('./testImage/image.png');
   try{
 
     let data = new FormData();
 
-    data.append( 'file', s );
+    data.append( 'file', f, {
+      contentType: 'img/png',
+      name: 'file',
+      filename: 'image.png',
+    });
 
     let headers = {
       ...data.getHeaders(),
@@ -43,7 +34,12 @@ function bufferToStream(myBuuffer) {
     console.log('OK');
   }
   catch(err){
-    console.log(err.response.data);
+    if(err.response){
+      console.log(err.response.data);
+    }
+    else{
+      console.log(err.message);
+    }
   }
   
 
